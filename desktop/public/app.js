@@ -208,13 +208,24 @@ $('fFile').addEventListener('change', (e) => {
   reader.readAsText(file)
 })
 
-$('btnSettings').onclick = () => openModal('settingsModal')
+$('btnSettings').onclick = async () => {
+  // 回填当前配置（不回显 Key）
+  try {
+    const s = await api('/api/status')
+    $('fApiBase').value = s.apiBase || ''
+    $('fModel').value = s.model || ''
+  } catch {}
+  openModal('settingsModal')
+}
 $('btnSettingsClose').onclick = () => closeModal('settingsModal')
 $('btnSettingsSave').onclick = async () => {
-  const apiKey = $('fApiKey').value.trim()
-  if (!apiKey) return alert('请填入 API Key')
+  const body = {
+    apiKey: $('fApiKey').value.trim(),
+    apiBase: $('fApiBase').value.trim(),
+    model: $('fModel').value.trim(),
+  }
   try {
-    await api('/api/config', { method: 'POST', body: JSON.stringify({ apiKey }) })
+    await api('/api/config', { method: 'POST', body: JSON.stringify(body) })
     closeModal('settingsModal')
   } catch (e) {
     alert(e.message)

@@ -30,39 +30,57 @@ fs.mkdirSync(DATA_DIR, { recursive: true })
 const db = loadJson(DB_FILE, { profiles: [], messages: [] })
 const saveDb = () => saveJson(DB_FILE, db)
 
-// API Key 优先读环境变量，其次读 data/config.json（界面上保存的）
-function getApiKey() {
-  if (process.env.DEEPSEEK_API_KEY) return process.env.DEEPSEEK_API_KEY
+const DEFAULT_BASE = 'https://api.deepseek.com'
+const DEFAULT_MODEL = 'deepseek-chat'
+
+// 配置优先级：环境变量 > data/config.json > 默认值
+function getLlmConfig() {
   const cfg = loadJson(CONFIG_FILE, {})
-  return cfg.deepseekApiKey || ''
+  return {
+    key: process.env.LLM_API_KEY || process.env.DEEPSEEK_API_KEY || cfg.apiKey || '',
+    base: (process.env.LLM_BASE_URL || cfg.apiBase || DEFAULT_BASE).replace(/\/+$/, ''),
+    model: process.env.LLM_MODEL || cfg.model || DEFAULT_MODEL,
+  }
 }
 
-// ---------- DeepSeek ----------
-async function callDeepSeek(messages, { jsonMode = false, temperature = 0.9, maxTokens = 1024 } = {}) {
-  const apiKey = getApiKey()
-  if (!apiKey) {
-    throw new Error('还没有配置 API Key，点右上角「设置」填入 DeepSeek Key')
+// ---------- LLM（任意 OpenAI 兼容接口）----------
+async function callLLM(messages, { jsonMode = false, temperature = 0.9, maxTokens = 1024 } = {}) {
+  const { key, base, model } = getLlmConfig()
+  if (!key) {
+    throw new Error('还没有配置 API Key，点右上角「设置」填入')
   }
-  const res = await fetch('https://api.deepseek.com/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      messages,
-      temperature,
-      max_tokens: maxTokens,
-      ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
-    }),
-  })
-  const json = await res.json().catch(() => ({}))
-  const content = json.choices && json.choices[0] && json.choices[0].message.content
-  if (!content) {
-    throw new Error(`DeepSeek 调用失败：${JSON.stringify(json).slice(0, 300)}`)
+  const url = base.endsWith('/chat/completions') ? base : `${base}/chat/completions`
+
+  const attempt = async (useJsonMode) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${key}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature,
+        max_tokens: maxTokens,
+        ...(useJsonMode ? { response_format: { type: 'json_object' } } : {}),
+      }),
+    })
+    const json = await res.json().catch(() => ({}))
+    const content = json.choices && json.choices[0] && json.choices[0].message.content
+    if (!content) {
+      throw new Error(`LLM 调用失败：${JSON.stringify(json).slice(0, 300)}`)
+    }
+    return content
   }
-  return content
+
+  try {
+    return await attempt(jsonMode)
+  } catch (e) {
+    // 部分兼容服务不支持 response_format，降级重试一次
+    if (jsonMode) return attempt(false)
+    throw e
+  }
 }
 
 // ---------- Prompt 构建（与小程序云函数保持一致）----------
@@ -160,14 +178,21 @@ const wrap = (fn) => (req, res) =>
   })
 
 app.get('/api/status', (req, res) => {
-  res.json({ hasKey: !!getApiKey() })
+  const { key, base, model } = getLlmConfig()
+  res.json({ hasKey: !!key, apiBase: base, model })
 })
 
-// 保存 API Key 到本地 data/config.json（不会回显）
+// 保存 LLM 配置到本地 data/config.json（Key 不会回显）
 app.post('/api/config', (req, res) => {
-  const key = String(req.body.apiKey || '').trim()
-  if (!key) return res.status(400).json({ error: 'API Key 不能为空' })
-  saveJson(CONFIG_FILE, { deepseekApiKey: key })
+  const cfg = loadJson(CONFIG_FILE, {})
+  const { apiKey, apiBase, model } = req.body || {}
+  if (typeof apiKey === 'string' && apiKey.trim()) cfg.apiKey = apiKey.trim()
+  if (typeof apiBase === 'string' && apiBase.trim()) {
+    cfg.apiBase = apiBase.trim().replace(/\/+$/, '')
+  }
+  if (typeof model === 'string' && model.trim()) cfg.model = model.trim()
+  if (!cfg.apiKey) return res.status(400).json({ error: 'API Key 不能为空' })
+  saveJson(CONFIG_FILE, cfg)
   res.json({ ok: true })
 })
 
@@ -198,7 +223,7 @@ app.post(
       sample.length >= 50
         ? buildExtractionMessages(name, relation, sample)
         : buildDescriptionMessages(name, relation, desc)
-    const raw = await callDeepSeek(messages, { jsonMode: true, temperature: 0.3, maxTokens: 1500 })
+    const raw = await callLLM(messages, { jsonMode: true, temperature: 0.3, maxTokens: 1500 })
     const styleProfile = JSON.parse(raw)
 
     const profile = {
@@ -250,7 +275,7 @@ app.post(
       .map((m) => ({ role: m.role, content: m.content }))
 
     const reply = (
-      await callDeepSeek([
+      await callLLM([
         { role: 'system', content: buildSystemPrompt(profile) },
         ...history,
         { role: 'user', content: text },
@@ -269,7 +294,7 @@ app.post(
 
 app.listen(PORT, () => {
   console.log(`有个回音已启动：http://localhost:${PORT}`)
-  if (!getApiKey()) {
+  if (!getLlmConfig().key) {
     console.log('提示：还没配置 DeepSeek API Key，打开页面后点右上角「设置」填入')
   }
 })

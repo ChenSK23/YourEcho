@@ -27,12 +27,20 @@ async function checkText(openid, content) {
   }
 }
 
+const LLM_API_KEY = process.env.LLM_API_KEY || process.env.DEEPSEEK_API_KEY
+const LLM_BASE_URL = process.env.LLM_BASE_URL || 'https://api.deepseek.com'
+const LLM_MODEL = process.env.LLM_MODEL || 'deepseek-chat'
+
 function callDeepSeek(messages, options = {}) {
-  if (!process.env.DEEPSEEK_API_KEY) {
-    return Promise.reject(new Error('DEEPSEEK_API_KEY 环境变量未配置'))
+  if (!LLM_API_KEY) {
+    return Promise.reject(new Error('LLM_API_KEY 环境变量未配置'))
   }
+  const base = new URL(LLM_BASE_URL)
+  const reqPath = base.pathname.endsWith('/chat/completions')
+    ? base.pathname
+    : `${base.pathname.replace(/\/+$/, '')}/chat/completions`
   const body = JSON.stringify({
-    model: 'deepseek-chat',
+    model: LLM_MODEL,
     messages,
     temperature: options.temperature ?? 0.9,
     max_tokens: options.maxTokens ?? 1024,
@@ -41,12 +49,12 @@ function callDeepSeek(messages, options = {}) {
   return new Promise((resolve, reject) => {
     const req = https.request(
       {
-        host: 'api.deepseek.com',
-        path: '/chat/completions',
+        host: base.host,
+        path: reqPath,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`,
+          Authorization: `Bearer ${LLM_API_KEY}`,
           'Content-Length': Buffer.byteLength(body),
         },
         timeout: 55000,

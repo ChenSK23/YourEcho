@@ -80,9 +80,14 @@
   <div id="settingsModal" class="modal-mask hidden">
     <div class="modal">
       <h2>设置</h2>
-      <label>DeepSeek API Key</label>
-      <p class="hint">在 platform.deepseek.com 创建，保存在本机 data/config.json，不会上传</p>
+      <label>API 地址</label>
+      <p class="hint">任意 OpenAI 兼容接口：DeepSeek / OpenAI / 通义 / GLM / Ollama 本地服务等，填到域名（不含 /chat/completions）</p>
+      <input id="fApiBase" placeholder="https://api.deepseek.com" autocomplete="off" />
+      <label>API Key</label>
+      <p class="hint">保存在本机 data/config.json，不会上传</p>
       <input id="fApiKey" type="password" placeholder="sk-…" autocomplete="off" />
+      <label>模型名</label>
+      <input id="fModel" placeholder="deepseek-chat" autocomplete="off" />
       <div class="modal-actions">
         <button id="btnSettingsClose" class="btn-secondary">关闭</button>
         <button id="btnSettingsSave" class="btn-primary">保存</button>

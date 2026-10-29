@@ -8,7 +8,7 @@
 
 - 微信小程序：TypeScript + SCSS，目录 `miniprogram/` + 云函数 `cloudfunctions/`（`appid` 为 touristappid 游客模式，开发时替换为自己的）
 - 电脑版：`desktop/` —— Express + 原生 JS SPA + `data/db.json` 文件存储，`npm install && npm start` 即用；API Key 存 `data/config.json` 或环境变量
-- LLM：DeepSeek `deepseek-chat`（电脑版直接调 API；小程序在云函数内调用）
+- LLM：任意 OpenAI 兼容接口，默认 `deepseek-chat`。配置键：`LLM_API_KEY`（兼容旧名 `DEEPSEEK_API_KEY`）、`LLM_BASE_URL`、`LLM_MODEL`；小程序版在云函数环境变量配置（`LLM_BASE_URL` 须为 https）
 
 电脑版与小程序版差异：无 msgSecCheck / OCR / openid；prompt 构建逻辑两端保持一致（`server.js` 与 `cloudfunctions/chat`+`extractStyle` 同构，改动需同步）。
 
@@ -22,7 +22,7 @@
    - `messages` — `{ _openid, conversationId, role, content, createdAt }`
 3. **部署云函数**（开发者工具中右键函数目录 → 上传并部署：云端安装依赖）：
    - `chat`、`extractStyle`、`deleteProfile`、`ocrText`
-4. **配置 DeepSeek Key**：云函数 `chat` 和 `extractStyle` 的环境变量中设置 `DEEPSEEK_API_KEY`（云开发控制台 → 云函数 → 配置 → 环境变量）。
+4. **配置 LLM**：云函数 `chat` 和 `extractStyle` 的环境变量中设置 `LLM_API_KEY`（`LLM_BASE_URL`/`LLM_MODEL` 可选，默认 DeepSeek；`LLM_BASE_URL` 须为 https）。
 5. `chat` / `extractStyle` 的 `config.json` 已声明 `security.msgSecCheck` 权限和 60s 超时，部署后可在控制台确认生效。
 
 ## 数据流

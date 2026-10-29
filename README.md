@@ -27,17 +27,17 @@ npm install
 npm start
 ```
 
-Open <http://localhost:3000>, click **Settings** (top-right) and paste your [DeepSeek API Key](https://platform.deepseek.com) (`sk-…`, a few dollars lasts a long time), then:
+Open <http://localhost:3000>, click **Settings** (top-right) and configure your LLM — **any OpenAI-compatible API works** (DeepSeek, OpenAI, Qwen, GLM, local Ollama…): API base URL, key and model name. Defaults are [DeepSeek](https://platform.deepseek.com) (`sk-…`, a few dollars lasts a long time). Then:
 
 1. **Summon an echo**: name the person → paste chat history (≥50 chars) or import a `.txt` file — no history? Just describe their style in a few lines
 2. **Chat**: click a card on the left; the AI replies in their voice. People who send bursts of short messages will actually burst into multiple bubbles
 
-Your key is stored at `desktop/data/config.json`; all profiles & chats live in `desktop/data/db.json`. Both are gitignored.
+Config is stored at `desktop/data/config.json`; all profiles & chats live in `desktop/data/db.json`. Both are gitignored.
 
-You can also provide the key via environment variable:
+You can also configure via environment variables:
 
 ```bash
-DEEPSEEK_API_KEY=sk-xxx npm start
+LLM_API_KEY=sk-xxx LLM_BASE_URL=https://api.deepseek.com LLM_MODEL=deepseek-chat npm start
 ```
 
 ### Features
@@ -49,7 +49,7 @@ DEEPSEEK_API_KEY=sk-xxx npm start
 
 ### WeChat Mini-Program
 
-Requires: WeChat DevTools + your own appid + CloudBase env + `DEEPSEEK_API_KEY`.
+Requires: WeChat DevTools + your own appid + CloudBase env + `LLM_API_KEY` (env vars `LLM_BASE_URL`/`LLM_MODEL` optional, default DeepSeek).
 
 Deployment steps, DB schema and compliance notes: see [AGENTS.md](./AGENTS.md). `appid` in `project.config.json` is set to `touristappid` — replace with your own to publish.
 
@@ -64,7 +64,7 @@ Deployment steps, DB schema and compliance notes: see [AGENTS.md](./AGENTS.md). 
 
 - Desktop: Node 18+ / Express / vanilla JS SPA / JSON file store
 - Mini-Program: TypeScript + SCSS / WeChat CloudBase (functions + database)
-- LLM: DeepSeek `deepseek-chat` (OpenAI-compatible API)
+- LLM: any OpenAI-compatible chat API (default `deepseek-chat`)
 
 ### License
 
@@ -95,17 +95,17 @@ npm install
 npm start
 ```
 
-打开 <http://localhost:3000>，右上角「设置」填入 [DeepSeek API Key](https://platform.deepseek.com)（sk- 开头，几块钱能用很久），然后：
+打开 <http://localhost:3000>，右上角「设置」配置 LLM——**任意 OpenAI 兼容接口都行**（DeepSeek / OpenAI / 通义 / GLM / Ollama 本地…）：填接口地址、API Key、模型名。默认是 [DeepSeek](https://platform.deepseek.com)（sk- 开头，几块钱能用很久）。然后：
 
 1. **召唤一个回音**：填昵称 → 粘贴聊天记录（≥50字）或导入 `.txt`，没有素材就写几句风格描述
 2. **开聊**：点左侧卡片进入对话，AI 按画像的语气回复，爱连发短句的人会真的连发多条气泡
 
-Key 保存位置：`desktop/data/config.json`；所有角色和对话在 `desktop/data/db.json`。这两个文件已被 `.gitignore` 排除，不会上传。
+配置保存位置：`desktop/data/config.json`；所有角色和对话在 `desktop/data/db.json`。这两个文件已被 `.gitignore` 排除，不会上传。
 
-也可以用环境变量提供 Key：
+也可以用环境变量提供配置：
 
 ```bash
-DEEPSEEK_API_KEY=sk-xxx npm start
+LLM_API_KEY=sk-xxx LLM_BASE_URL=https://api.deepseek.com LLM_MODEL=deepseek-chat npm start
 ```
 
 ### 功能
@@ -117,7 +117,7 @@ DEEPSEEK_API_KEY=sk-xxx npm start
 
 ### 微信小程序版
 
-需要：微信开发者工具 + 自己的小程序 appid + 云开发环境 + `DEEPSEEK_API_KEY`。
+需要：微信开发者工具 + 自己的小程序 appid + 云开发环境 + `LLM_API_KEY`（`LLM_BASE_URL`/`LLM_MODEL` 可选，默认 DeepSeek）。
 
 部署步骤、数据库结构、合规要求见 [AGENTS.md](./AGENTS.md)。`project.config.json` 里的 `appid` 已置为 `touristappid`，开发时换成自己的。
 
@@ -132,7 +132,7 @@ DEEPSEEK_API_KEY=sk-xxx npm start
 
 - 电脑版：Node 18+ / Express / 原生 JS SPA / JSON 文件存储
 - 小程序：TypeScript + SCSS / 微信云开发（云函数+云数据库）
-- LLM：DeepSeek `deepseek-chat`（OpenAI 兼容接口）
+- LLM：任意 OpenAI 兼容对话接口（默认 `deepseek-chat`）
 
 ### License
 
