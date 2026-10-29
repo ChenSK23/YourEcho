@@ -1,0 +1,115 @@
+.page {
+  min-height: 100vh;
+  padding: 32rpx 32rpx 48rpx;
+  box-sizing: border-box;
+  background: #faf6f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 24rpx 8rpx 40rpx;
+}
+
+.title {
+  font-size: 56rpx;
+  font-weight: 600;
+  color: #33302b;
+  letter-spacing: 4rpx;
+}
+
+.subtitle {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #9a9186;
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #9a9186;
+  font-size: 28rpx;
+  gap: 16rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  color: #6b6459;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+}
+
+.list {
+  flex: 1;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(90, 80, 60, 0.06);
+}
+
+.card-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: #ece5d8;
+  flex-shrink: 0;
+}
+
+.card-avatar--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: #8a7f6d;
+}
+
+.card-body {
+  flex: 1;
+  margin-left: 24rpx;
+}
+
+.card-name {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #33302b;
+}
+
+.card-relation {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #9a9186;
+}
+
+.card-arrow {
+  font-size: 44rpx;
+  color: #c8bfae;
+}
+
+.footer {
+  padding-top: 24rpx;
+}
+
+.btn-primary {
+  background: #33302b;
+  color: #faf6f0;
+  border-radius: 48rpx;
+  font-size: 30rpx;
+}
+
+.footer-link {
+  text-align: center;
+  margin-top: 24rpx;
+  font-size: 24rpx;
+  color: #9a9186;
+}

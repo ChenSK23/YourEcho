@@ -1,0 +1,9 @@
+{
+  "name": "extractStyle",
+  "version": "1.0.0",
+  "description": "风格画像生成：素材安检 + DeepSeek 风格抽取 + 创建角色",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~3.0.0"
+  }
+}

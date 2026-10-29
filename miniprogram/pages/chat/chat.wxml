@@ -1,0 +1,37 @@
+<!--chat.wxml 对话页-->
+<view class="page">
+  <view class="ai-badge">TA 的话由 AI 模拟生成，并非本人回复</view>
+
+  <scroll-view
+    class="messages"
+    scroll-y
+    scroll-into-view="{{scrollInto}}"
+    scroll-with-animation
+  >
+    <view class="messages-inner">
+      <view
+        wx:for="{{messages}}"
+        wx:key="id"
+        id="msg-{{item.id}}"
+        class="row row--{{item.role}}"
+      >
+        <view class="bubble bubble--{{item.role}}">{{item.content}}</view>
+      </view>
+      <view class="tail-space"></view>
+    </view>
+  </scroll-view>
+
+  <view class="input-bar">
+    <input
+      class="input"
+      placeholder="说点什么…"
+      value="{{input}}"
+      confirm-type="send"
+      bindinput="onInput"
+      bindconfirm="send"
+    />
+    <button class="send-btn {{!input.trim() || sending ? 'send-btn--disabled' : ''}}" bindtap="send">
+      发送
+    </button>
+  </view>
+</view>

@@ -1,0 +1,56 @@
+<!--create.wxml 新建角色-->
+<view class="page">
+  <view class="field">
+    <view class="label">TA 的昵称</view>
+    <input class="input" placeholder="平时怎么称呼 TA" maxlength="30" value="{{name}}" bindinput="onNameInput" />
+  </view>
+
+  <view class="field">
+    <view class="label">TA 和你的关系（选填）</view>
+    <input class="input" placeholder="如：爱人 / 外婆 / 战友" maxlength="20" value="{{relation}}" bindinput="onRelationInput" />
+  </view>
+
+  <view class="field">
+    <view class="label">头像（选填）</view>
+    <view class="avatar-row" bindtap="chooseAvatar">
+      <image wx:if="{{avatarTempPath}}" class="avatar-preview" src="{{avatarTempPath}}" mode="aspectFill" />
+      <view wx:else class="avatar-add">＋ 选择图片</view>
+    </view>
+  </view>
+
+  <view class="field">
+    <view class="label">聊天素材（推荐）</view>
+    <view class="hint">上传你与 TA 的聊天截图，或粘贴/导入文字记录，越多越像。原始素材不会保存到服务器。</view>
+    <textarea
+      class="textarea"
+      placeholder="粘贴聊天记录文本，或点击下方按钮导入…"
+      maxlength="{{20000}}"
+      value="{{sampleText}}"
+      bindinput="onSampleInput"
+    />
+    <view class="import-row">
+      <button class="btn-secondary import-btn" bindtap="importScreenshots" disabled="{{recognizing}}">
+        {{recognizing ? '识别中…' : '上传聊天截图'}}
+      </button>
+      <button class="btn-secondary import-btn" bindtap="importFile">导入 .txt</button>
+    </view>
+  </view>
+
+  <view class="field">
+    <view class="label">或者：描述 TA 说话的样子</view>
+    <view class="hint">没有聊天记录时，可以写写 TA 平时的口头禅、语气、爱用的话。有素材时此处可留空。</view>
+    <textarea
+      class="textarea textarea--short"
+      placeholder="例如：他说话很短，爱用「嗯」「行」，从来不用标点，高兴的时候会连发好几条…"
+      maxlength="{{2000}}"
+      value="{{description}}"
+      bindinput="onDescInput"
+    />
+  </view>
+
+  <button class="btn-primary {{submitting ? 'btn-disabled' : ''}}" bindtap="submit">
+    {{submitting ? '创建中…' : '生成 TA 的说话方式'}}
+  </button>
+
+  <view class="notice">请确保上传的素材为你与当事人的聊天内容 · AI 生成内容仅供思念陪伴</view>
+</view>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>有个回音</title>
+  <link rel="icon" href="avatar.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <aside id="sidebar">
+      <header class="brand">
+        <h1>有个回音</h1>
+        <p>你说的话，TA 的语气替你回答</p>
+      </header>
+
+      <div id="profileList" class="profile-list"></div>
+
+      <footer class="sidebar-footer">
+        <button id="btnCreate" class="btn-primary">＋ 召唤一个回音</button>
+        <div class="footer-links">
+          <span id="btnSettings">设置</span>
+          <span id="btnAbout">关于</span>
+        </div>
+      </footer>
+    </aside>
+
+    <main id="main">
+      <div id="chatHeader" class="chat-header hidden">
+        <div>
+          <div id="chatName" class="chat-name"></div>
+          <div id="chatRelation" class="chat-relation"></div>
+        </div>
+        <button id="btnDelete" class="btn-text-danger">删除</button>
+      </div>
+
+      <div id="aiBadge" class="ai-badge hidden">TA 的话由 AI 模拟生成，并非本人回复</div>
+
+      <div id="emptyState" class="empty-state">
+        <div class="empty-title">这里还很安静</div>
+        <div class="empty-desc">导入一段聊天记录，让 TA 的话有个回音</div>
+      </div>
+
+      <div id="messages" class="messages hidden"></div>
+
+      <div id="composer" class="composer hidden">
+        <input id="inputBox" placeholder="说点什么…" autocomplete="off" />
+        <button id="btnSend">发送</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- 新建角色弹窗 -->
+  <div id="createModal" class="modal-mask hidden">
+    <div class="modal">
+      <h2>召唤一个回音</h2>
+      <label>TA 的昵称</label>
+      <input id="fName" maxlength="30" placeholder="平时怎么称呼 TA" />
+      <label>TA 和你的关系（选填）</label>
+      <input id="fRelation" maxlength="20" placeholder="如：爱人 / 外婆 / 战友" />
+
+      <label>聊天素材（推荐）</label>
+      <p class="hint">粘贴你与 TA 的聊天记录，或导入 .txt 文件，至少 50 字，越多越像。素材只在本地处理。</p>
+      <textarea id="fSample" maxlength="20000" placeholder="粘贴聊天记录文本…"></textarea>
+      <input type="file" id="fFile" accept=".txt,.csv" class="file-input" />
+
+      <label>或者：描述 TA 说话的样子</label>
+      <p class="hint">没有聊天记录时，写写 TA 的口头禅、语气、爱用的话。有素材时此处可留空。</p>
+      <textarea id="fDesc" maxlength="2000" class="short" placeholder="例如：他说话很短，爱用「嗯」「行」，从来不用标点…"></textarea>
+
+      <div class="modal-actions">
+        <button id="btnCreateCancel" class="btn-secondary">取消</button>
+        <button id="btnCreateSubmit" class="btn-primary">生成 TA 的说话方式</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 设置弹窗 -->
+  <div id="settingsModal" class="modal-mask hidden">
+    <div class="modal">
+      <h2>设置</h2>
+      <label>DeepSeek API Key</label>
+      <p class="hint">在 platform.deepseek.com 创建，保存在本机 data/config.json，不会上传</p>
+      <input id="fApiKey" type="password" placeholder="sk-…" autocomplete="off" />
+      <div class="modal-actions">
+        <button id="btnSettingsClose" class="btn-secondary">关闭</button>
+        <button id="btnSettingsSave" class="btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 关于弹窗 -->
+  <div id="aboutModal" class="modal-mask hidden">
+    <div class="modal">
+      <h2>关于</h2>
+      <p class="about-p">「有个回音」用你提供的聊天素材提炼说话风格，由 AI 模拟 TA 的语气与你对话。</p>
+      <p class="about-p">所有数据只存在你自己的电脑上（desktop/data/）。聊天内容由 DeepSeek 生成并标有 AI 标识，不是真人回复。</p>
+      <p class="about-p">上传的素材请确保是当事人同意的内容；已故者素材请确认你是其近亲属。</p>
+      <div class="modal-actions">
+        <button id="btnAboutClose" class="btn-primary">知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "deleteProfile",
+  "version": "1.0.0",
+  "description": "删除角色及其会话、消息、头像文件",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~3.0.0"
+  }
+}

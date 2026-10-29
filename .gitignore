@@ -1,0 +1,14 @@
+# 依赖
+node_modules/
+
+# 桌面版运行时数据（用户角色/对话/API Key）
+desktop/data/
+desktop/.env
+
+# 本地 IDE / 工具配置
+.devin/
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,26 @@
+<!--privacy.wxml 隐私政策-->
+<view class="page">
+  <view class="h1">隐私政策</view>
+  <view class="p">更新日期：2026 年 9 月</view>
+
+  <view class="h2">1. 我们收集什么</view>
+  <view class="p">· 你主动粘贴或导入的聊天文本：仅用于一次性提炼说话风格摘要（口头禅、语气等），原始文本处理完成后不在服务器留存。</view>
+  <view class="p">· 角色信息：昵称、关系描述、可选头像，以及提炼出的风格画像，用于生成对话。</view>
+  <view class="p">· 对话内容：你与本小程序内 AI 角色的聊天记录，保存在云数据库中，仅用于维持上下文。</view>
+
+  <view class="h2">2. 我们如何使用</view>
+  <view class="p">你的素材和对话只用于为你本人提供 AI 角色扮演服务，不会用于训练模型、不会分享给其他用户、不会用于广告。</view>
+
+  <view class="h2">3. 第三方服务</view>
+  <view class="p">对话内容由第三方大模型服务（DeepSeek）生成。发送给模型服务的内容经过必要处理，不包含你的微信身份信息。</view>
+
+  <view class="h2">4. 你的权利</view>
+  <view class="p">· 长按首页角色卡片可随时删除角色及其全部对话记录，删除后不可恢复。</view>
+  <view class="p">· 你可以随时停止使用本小程序。</view>
+
+  <view class="h2">5. 重要提醒</view>
+  <view class="p">· 本小程序中的角色均由 AI 模拟，所有回复并非真人发出。</view>
+  <view class="p">· 聊天素材涉及第三人信息：在世的，须获得其知情同意；已故的，上传者须为其近亲属且素材须为你与当事人的聊天内容。</view>
+  <view class="p">· 本功能用于思念陪伴，请理性使用；如出现持续情绪低落，请多与身边的亲友交流。</view>
+  <view class="p">· 请勿在对话中提交他人隐私、敏感信息或违法内容。</view>
+</view>

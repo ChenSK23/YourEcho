@@ -1,0 +1,13 @@
+{
+  "name": "yourecho-miniprogram",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "miniprogram-api-typings": "^2.8.3-1",
+    "typescript": "~5.5.0"
+  }
+}

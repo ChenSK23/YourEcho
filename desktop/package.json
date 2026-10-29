@@ -1,0 +1,16 @@
+{
+  "name": "yourecho-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "有个回音 · 电脑版 —— 导入聊天素材，让 AI 学会 TA 的说话方式",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
